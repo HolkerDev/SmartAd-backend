@@ -1,3 +1,4 @@
 typing_extensions==4.3.0
 pyjwt==2.4.0
 mypy-boto3-dynamodb==1.24.60
+boto3==1.24.66

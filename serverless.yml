@@ -45,6 +45,11 @@ package:
     - venv/**
     - src/tests/**
 
+custom:
+  pythonRequirements:
+    noDeploy:
+      - boto3
+
 functions:
   register:
     handler: src.functions.register.handler.handle
