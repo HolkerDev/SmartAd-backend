@@ -1,8 +1,6 @@
 import json
-import re
 import unittest
 
-from src.functions.register.handler import register
 from src.utils.aws_request import AwsRequest, AwsResponse
 
 
