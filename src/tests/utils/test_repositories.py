@@ -65,6 +65,45 @@ class RepositoriesModuleTest(unittest.TestCase):
             }
         )
 
+    def test_find_by_email_f_OK(self):
+        table = MagicMock(Table)
+        # TODO: Place it in a separate method
+        consumed_capacity = MagicMock(ConsumedCapacityTableTypeDef)
+        response_metadata = MagicMock(ResponseMetadataTypeDef)
+        table.get_item.return_value = GetItemOutputTableTypeDef(
+            Item={"email": "test@email!", "password": "test_pass".encode()},
+            ConsumedCapacity=consumed_capacity,
+            ResponseMetadata=response_metadata,
+        )
+        repo = UserRepository(table)
+        user = repo.find_by_email_f("test@email!")
+        if user is None:
+            self.fail()
+        else:
+            self.assertEqual(user.email, "test@email!")
+            self.assertEqual(user.password, "test_pass".encode())
+
+    def test_find_by_email_f_empty_response(self):
+        table = MagicMock(Table)
+        # TODO: Place it in a separate method
+        consumed_capacity = MagicMock(ConsumedCapacityTableTypeDef)
+        response_metadata = MagicMock(ResponseMetadataTypeDef)
+        table.get_item.return_value = GetItemOutputTableTypeDef(
+            Item={},
+            ConsumedCapacity=consumed_capacity,
+            ResponseMetadata=response_metadata,
+        )
+        repo = UserRepository(table)
+        user = repo.find_by_email_f("test@email!")
+        self.assertIsNone(user)
+
+    def test_find_by_email_f_none_response(self):
+        table = MagicMock(Table)
+        table.get_item.return_value = None
+        repo = UserRepository(table)
+        user = repo.find_by_email_f("test@email!")
+        self.assertIsNone(user)
+
 
 if __name__ == "__main__":
     unittest.main()

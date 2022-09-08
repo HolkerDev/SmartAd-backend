@@ -53,9 +53,13 @@ custom:
 functions:
   register:
     handler: src.functions.register.handler.handle
-    environment:
-      TABLE_NAME: tableName
     events:
       - http:
           path: /user/register
+          method: POST
+  login:
+    handler: src.functions.login.handler.handle
+    events:
+      - http:
+          path: /user/login
           method: POST
