@@ -1,7 +1,9 @@
-"""Module that contains user repository related code"""
-from typing import Optional
+"""Module that contains all repository related code"""
+from operator import itemgetter
+from typing import Optional, Sequence
 from mypy_boto3_dynamodb.service_resource import Table
-from src.utils.models import FullUser, User
+from src.utils.models import Category, FullUser, User
+from boto3.dynamodb.conditions import Key
 
 
 class UserRepository:
@@ -36,3 +38,25 @@ class UserRepository:
                 "password": password,
             }
         )
+
+
+class CategoryRepository:
+    """Repository for managing categories"""
+
+    def __init__(self, table: Table):
+        self.client = table
+
+    def find_all(self) -> Sequence[Category]:
+        categories: Sequence[Category] = []
+        result = self.client.query(
+            KeyConditionExpression=Key("pk").begins_with("category#")
+        )
+        if not result or "Item" not in result:
+            return categories
+
+        for item in result["Items"]:
+            category = Category.from_item(item=item)
+            if category:
+                categories.append(category)
+
+        return categories

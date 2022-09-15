@@ -63,3 +63,10 @@ functions:
       - http:
           path: /user/login
           method: POST
+
+  categories:
+    handler: src.functions.categories.handler.handle
+    events:
+      - http:
+          path: /categories
+          method: GET

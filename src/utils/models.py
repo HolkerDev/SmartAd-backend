@@ -34,6 +34,19 @@ class FullUser:
         return cls(item["email"], item["password"])
 
 
+class Category:
+    """Category model"""
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+    @classmethod
+    def from_item(cls, item: dict):
+        if "name" not in item or item["name"] is None:
+            return None
+        return cls(item["name"])
+
+
 def is_valid_full_user_item(item: dict) -> boolean:
     if "email" not in item or "password" not in item:
         return False
